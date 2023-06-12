@@ -4,9 +4,13 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Signup from './Signup';
 import { Login } from './Login';
 import Dashboard from './Dashboard';
+import { useContext, useState } from 'react';
+import { AuthContext } from './context/AuthContext ';
 
 function App() {
-  const user = false;
+  // const user = false;
+  // const [user, setUser] = useState(true);
+  const {user} = useContext(AuthContext);
   return (
     <div className="App">
       {/* <header className="App-header">
@@ -18,11 +22,13 @@ function App() {
             {
               user ? (
                 <>
-                  <Route path='/' element ={<Login/>} />
                   <Route path='/dashboard' element ={<Dashboard />} />
                 </>
               ): (
-                <Route path='/' element ={<Signup/>} />
+                <>
+                  <Route path='/login' element ={<Login/>} />
+                  <Route path='/' element ={<Signup/>} />
+                </>
               )
             }
           </Routes>

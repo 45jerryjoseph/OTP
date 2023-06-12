@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react'
 import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import './signup.scss'
-import { AuthContext } from './context/AuthContext ';
 const Signup = () => {
   const [credentials, setCredentials] = useState({
     firstname:undefined,
@@ -10,22 +9,21 @@ const Signup = () => {
     email:undefined,
     password: undefined
   });
-  // const {loading, error, dispatch} = useContext(AuthContext);
-  // const navigate = useNavigate();
+  const [otp,setOtp] =useState();
+  const navigate = useNavigate();
   const handleChange = (e) =>{
     setCredentials((prev) => ({...prev,[e.target.id] : e.target.value}));
   }
   const handleClick = async(e) => {
     e.preventDefault();
-    // dispatch({type:"LOGIN_START"});
     try {
+      // execute this request below only when OTP inserted === OTP generated
       const res = await axios.post('/auth/register',credentials);
-      // dispatch({type : "LOGIN_SUCCESS", payload : res.data.details});
       console.log(res);
-      // navigate("/dashboard")
+      // setUser(true)
+      navigate(`/login`);
     } catch (err) {
       console.log(err.message)
-      // dispatch({type : "LOGIN_FAILURE" , payload:err.response.data});
     }
   }
   return (
@@ -38,11 +36,12 @@ const Signup = () => {
               <input type="text" className="lastname" placeholder="lastname" id='lastname' onChange={handleChange}/>
               <input type="email" className="email" placeholder="email" id='email' onChange={handleChange}/>
               <input type="password" className="password" placeholder="password" id='password' onChange={handleChange}/>
-              {/* <div className="otpContainer">
-                <input type="text" name="otp" id="" placeholder='fill in otp' className='otp'/>
+              <div className="otpContainer">
+                <input type="text" name="otp" id="" placeholder='fill in otp' className='otp' required/>
                 <button type="submit">Get OTP</button>
-              </div> */}
+              </div>
               <button className="submit"  onClick={handleClick}>SUBMIT </button>
+            <p>Already have an account? <strong> <Link to={"/login"}> Login here </Link></strong></p>
             </div>
           </div>
         </div>

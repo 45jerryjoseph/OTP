@@ -1,57 +1,50 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './dashboard.scss'
+import { AuthContext } from './context/AuthContext ';
+import axios from 'axios';
 const Dashboard = () => {
+    const {user} = useContext(AuthContext);
+    const {FirstName,LastName, Email } = user
+    const [users, setUsers] = useState([])
+    // console.log(users[0].FirstName);
+    useEffect(()=>{
+        const getList = async () => {
+            try {
+                const res = await axios.get(`/users/`);
+                setUsers(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        getList();
+    },[users])
     return (
-      <>
-            <div class="container">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h1>HTML Tables</h1>
+        <>
+            <div className="container">
+            <div className="panel panel-default">
+                <div className="panel-heading">
+                    <h1 style={{color: "blueviolet"}}>{Email}</h1>
+                    <h2>Welcome <p style={{color:"red"}}>{FirstName}  {LastName} </p> this has been a successfull Login.</h2>
+                    <h3>Here is your Dashboard</h3>
                 </div>
-                <div class="panel-body">
-                    <table class="table-latitude">
-                        <caption>Employee Information</caption>
+                <h1>You can also associate with:</h1>
+                <div className="panel-body">
+                    <table className="table-latitude ">
+                        {/* <caption>Employee Information</caption> */}
                         <thead>
-                            <th>Name</th>
-                            <th>Designation</th>
-                            <th>E-mail</th>
+                            <td>First Name</td>
+                            <td>Last Name</td>
+                            <td>E-mail</td>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <td>Contact details for the Knowledge and Development Team</td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            <tr>
-                                <th>Robyn</th>
-                                <td>Technical Writer</td>
-                                <td>robyn@example.com</td>
-                            </tr>
-                            <tr>
-                                <th>Mandy</th>
-                                <td>Technical Writer</td>
-                                <td>mandy@example.com</td>
-                            </tr>
-                            <tr>
-                                <th>Kate</th>
-                                <td>Communications Leader</td>
-                                <td>kate@example.com</td>
-                            </tr>
-                            <tr>
-                                <th>Steven</th>
-                                <td>Technical Writer</td>
-                                <td>steven@example.com</td>
-                            </tr>
-                            <tr>
-                                <th>Sophie</th>
-                                <td>Technical Writer</td>
-                                <td>sophie@example.com</td>
-                            </tr>
-                            <tr>
-                                <th>Ashur</th>
-                                <td>Intranet Administrator</td>
-                                <td>ashur@example.com</td>
-                            </tr>
+                        <tbody >
+                            {/* {users.map((user, i) => {
+                                <tr key={i}>
+                                    <th>{user.FirstName}</th>
+                                    <td>{user.LastName}</td>
+                                    <td>{user.Email}</td>
+                                </tr>
+                            })}; */}
                         </tbody>
                     </table>
                 </div>

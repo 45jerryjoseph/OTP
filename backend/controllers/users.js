@@ -7,22 +7,22 @@ export const getUsers = async(req,res) => {
         await db.all(
             `SELECT * FROM users;`, (err,rows) => {
                 try {
-                    rows.forEach(
-                        row => {
-                            console.log(row);
+                    // rows.forEach(
+                    //     row => {
+                    //         console.log(row);
                             
-                        }
-                    );
+                    //     }
+                    // );
                     // res.send(rows);
                     res.status(200).json(rows);
 
                 } catch (err) {
-                    console.log(err.message);
+                    console.log(err);
                 }
             
             }
         )
-        db.close();
+        // db.close();
     } catch (error) {
         console.log(error)
     }
