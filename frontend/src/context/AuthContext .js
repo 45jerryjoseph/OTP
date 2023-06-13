@@ -1,6 +1,4 @@
 //context API
-
-
 import { useEffect, useReducer } from "react";
 import { createContext } from "react";
 // import Login from "../pages/login/Login";

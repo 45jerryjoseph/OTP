@@ -4,19 +4,22 @@ import { generateOTP } from '../services/Otp.js';
 import { sendMail } from '../services/Mail.js';
 const db = new sqlite3.Database('/home/jerryj/Jerry/BSSC/OTPform/backend/db/users.db')
 
-export const createUserOtp =  async (email) =>{
+export const createUserOtp =  async (req,res) =>{
+    console.log(req.query)
+    // res.json({message:"Thanks"})
+    const { email } = req.query;
     const otpGenerated = generateOTP();
     const sql = `INSERT INTO otps (Email,Otp) VALUES (?,?)`;
     db.run(sql,[email,otpGenerated], async(err)=>{
         if (err){
             console.log(err ,"1");
-
         } else {
             try {
                 await sendMail({
                     to: email,
                     otp: otpGenerated
                 })
+                res.status(200).json({message: "Check your Email Adress for your Verification OTP"});
             } catch (err) {
                 console.log("No email Found in Otps");
             }
@@ -24,15 +27,7 @@ export const createUserOtp =  async (email) =>{
         }
     })
 }
-//Get user OTP from the database and display.
-// Check your Email for OTP.
-export const getUserOtp = (req,res) =>{
-    try {
-        const sql = ``;
-    } catch (err) {
-        console.log(err);
-    }
-}
+
 
 //Validating the user login Otp
 export const validateUserLogin = async (email, otp) =>{
@@ -78,7 +73,6 @@ export const register = async(req,res) =>{
     } catch (err) {
         console.log(err);
     }
-    createUserOtp(email);
 }
 
 export const login = async (req,res) => {
