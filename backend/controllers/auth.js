@@ -1,7 +1,63 @@
 import sqlite3 from 'sqlite3';
 import CryptoJS from 'crypto-js';
+import { generateOTP } from '../services/Otp.js';
+import { sendMail } from '../services/Mail.js';
 const db = new sqlite3.Database('/home/jerryj/Jerry/BSSC/OTPform/backend/db/users.db')
 
+export const createUserOtp =  async (email) =>{
+    const otpGenerated = generateOTP();
+    const sql = `INSERT INTO otps (Email,Otp) VALUES (?,?)`;
+    db.run(sql,[email,otpGenerated], async(err)=>{
+        if (err){
+            console.log(err ,"1");
+
+        } else {
+            try {
+                await sendMail({
+                    to: email,
+                    otp: otpGenerated
+                })
+            } catch (err) {
+                console.log("No email Found in Otps");
+            }
+            console.log({message: "User created to Otps Table"})
+        }
+    })
+}
+//Get user OTP from the database and display.
+// Check your Email for OTP.
+export const getUserOtp = (req,res) =>{
+    try {
+        const sql = ``;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+//Validating the user login Otp
+export const validateUserLogin = async (email, otp) =>{
+    try {
+        const sql = `SELECT * FROM otps WHERE Email = ?`;
+        db.get(sql,[email], (err, otpRow) => {
+            if (err){
+                console.log(err);
+                return;
+            }
+            if (otpRow && otpRow.Otp !== otp){
+                console.log("Invalid OTP");
+
+            } else {
+                console.log("Valid OTP")
+                return otpRow
+            }
+
+            //Start from here create a middleware that will verify Email
+            // eg: (req,res,next)
+        });
+    } catch (err) {
+        console.log(err)
+    }
+}
 export const register = async(req,res) =>{
     const {firstname, lastname, email} = req.body;
     const encpassword = CryptoJS.AES.encrypt(req.body.password,process.env.encCode).toString();
@@ -20,8 +76,9 @@ export const register = async(req,res) =>{
         );
         // res.json(req.body)
     } catch (err) {
-        console.log(err)
+        console.log(err);
     }
+    createUserOtp(email);
 }
 
 export const login = async (req,res) => {

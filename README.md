@@ -1,3 +1,10 @@
+SECTION1: Setting up Backend in Express JS
+SECTION2: Creating OTP service
+SECTION3: Creating Email Service
+SECTION4: Database Persistance
+SECTION5: Assembling the services with routes and Controllers
+
+SECTION 3:
 We have multiple options for creting Email services 
 eg:     AWS SES
         SENDGRID

@@ -36,10 +36,10 @@ const Signup = () => {
               <input type="text" className="lastname" placeholder="lastname" id='lastname' onChange={handleChange}/>
               <input type="email" className="email" placeholder="email" id='email' onChange={handleChange}/>
               <input type="password" className="password" placeholder="password" id='password' onChange={handleChange}/>
-              <div className="otpContainer">
+              {/* <div className="otpContainer">
                 <input type="text" name="otp" id="" placeholder='fill in otp' className='otp' required/>
                 <button type="submit">Get OTP</button>
-              </div>
+              </div> */}
               <button className="submit"  onClick={handleClick}>SUBMIT </button>
             <p>Already have an account? <strong> <Link to={"/login"}> Login here </Link></strong></p>
             </div>
