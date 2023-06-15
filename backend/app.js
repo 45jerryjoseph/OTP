@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import sqlite3 from 'sqlite3';
 import usersRoute from "./routes/users.js";
 import authRoute from "./routes/auth.js"
+import verifyRoute from "./routes/verify.js"
 
 //configuring dotenv
 dotenv.config();
@@ -25,6 +26,9 @@ const connect = async() => {
 }
 app.use("/api/users",usersRoute);
 app.use("/api/auth",authRoute);
+// It is possible to implement the verify but since the email is not uniq
+// in database we cannot select by ID
+app.use("/auth/verify",verifyRoute);
 
 app.listen(8080, () => {
     connect();

@@ -16,10 +16,10 @@ export const createUserOtp =  async (req,res) =>{
         } else {
             try {
                 await sendMail({
-                    to: email,
+                    email: email,
                     otp: otpGenerated
                 })
-                res.status(200).json({message: "Check your Email Adress for your Verification OTP"});
+                res.status(200).json({message: "Check your Email Adress for your Verification OTP" ,otpGenerated});
             } catch (err) {
                 console.log("No email Found in Otps");
             }
@@ -82,6 +82,7 @@ export const login = async (req,res) => {
         const sql = `SELECT * FROM users WHERE email = ?`;
         db.get(sql,[email], (error, row)=>{
             if (error){
+                res.
                 console.error(error);
                 return;
             }
@@ -94,7 +95,12 @@ export const login = async (req,res) => {
                 const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
                 // console.log(originalPassword);
                 // res.json(originalPassword);
-                originalPassword !== req.body.password && res.status(401).json("Wrong password or Username");
+                try {
+                    originalPassword !== req.body.password && res.status(401).json("Wrong password or Username");
+                    
+                } catch (error) {
+                    res.json({message: "Wrong password or Username"})
+                }
                 // console.log(`User password: ${Password}`)
                 res.status(200).json({details :{...otherDetails}})
             } else {

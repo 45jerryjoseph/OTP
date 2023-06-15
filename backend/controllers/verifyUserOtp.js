@@ -1,4 +1,4 @@
-import { validateUserLogin } from "./controllers/auth.js";
+import { validateUserLogin } from "./auth.js";
 
 const verifyEmail = async (req, res, next) =>{
     const {email, otp} = req.body;

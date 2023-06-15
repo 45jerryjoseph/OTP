@@ -1,16 +1,21 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv'
+dotenv.config();
 const transporter = nodemailer.createTransport({
     service: 'gmail',
+    // secure: false,
     auth: {
         user: process.env.MAIL_EMAIL,
         pass: process.env.MAIL_PASSWORD,
+        // user: "secc545@gmail.com",
+        // pass: "iymyfujssnjmvggl",
     }
 });
 
-export const sendMail = async (email, otp) => {
+export const sendMail = async ({email, otp}) => {
     try {
         let info = await transporter.sendMail({
-            from: process.env.MAIL_EMAIL,
+            from: "secc545@gmail.com",
             to: email,
             subject: 'Hello 👋',
             html: `
@@ -29,7 +34,8 @@ export const sendMail = async (email, otp) => {
         return info; 
     } catch (err) {
         console.log(err)
-        return false
+        console.log("ERRor of Credentials AUTH")
+        // return false
     }
 }
 
