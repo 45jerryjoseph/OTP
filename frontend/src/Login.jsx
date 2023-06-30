@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AuthContext } from './context/AuthContext '
 import './login.scss';
 import { useNavigate } from 'react-router-dom';
+import validator from 'validator';
 
 export const Login = () => {
 
@@ -22,8 +23,18 @@ export const Login = () => {
   const [disable, setDisable] = useState(false);
   const [color, setColor] = useState('green')
   const navigate = useNavigate();
+
   const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+    const email = e.target.value;
+    // Here we are validating based on regular expression eg:
+    //const isEmail = (email) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+    if (validator.isEmail(email)) {
+      setEmail(email);
+      setMessage("Valid Email");
+    } else {
+      setMessage("Invalid Email 📩.Make Changes");
+    }
+
   }
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -41,9 +52,11 @@ export const Login = () => {
       dispatch({type: "LOGIN_SUCESS", payload: res.data.details});
       navigate("/dashboard");
       console.log(res.data.details);
-      setMessage(res.data.message)
+      // setMessage(res.data.message)
     } catch (err) {
       dispatch({type : "LOGIN_FAILURE" , payload:err.response.data});
+      setMessage(err.response.data.message);
+      // console.log(err)
     }
 
   }
@@ -89,7 +102,7 @@ export const Login = () => {
                 {
                   verify ? (
                     <button onClick={handleVerifyOtp} style={{backgroundColor: color, color :"whitesmoke", borderRadius: "20px"
-                  }} disabled = {disable}> { disable == true ? (<>Valid</>):(<>Verify OTP</>)}</button>
+                  }} disabled = {disable}> { disable === true ? (<>Valid</>):(<>Verify OTP</>)}</button>
                   ): (
                     <button onClick={handleGetOtp}>Get OTP</button>
                   )

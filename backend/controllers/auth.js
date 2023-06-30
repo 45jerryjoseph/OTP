@@ -82,8 +82,9 @@ export const login = async (req,res) => {
         const sql = `SELECT * FROM users WHERE email = ?`;
         db.get(sql,[email], (error, row)=>{
             if (error){
-                res.
+                // res.
                 console.error(error);
+                // console.log("11")
                 return;
             }
 
@@ -96,15 +97,22 @@ export const login = async (req,res) => {
                 // console.log(originalPassword);
                 // res.json(originalPassword);
                 try {
-                    originalPassword !== req.body.password && res.status(401).json("Wrong password or Username");
+                    if (originalPassword !== req.body.password ){
+                        res.status(401).json({message :"Wrong password or Username"});
+                    } else {
+                        res.status(200).json({details :{...otherDetails}});
+                    }
+                    // originalPassword !== req.body.password && res.status(401).json("Wrong password or Username");
                     
                 } catch (error) {
+                    // console.log(error)
                     res.json({message: "Wrong password or Username"})
                 }
                 // console.log(`User password: ${Password}`)
-                res.status(200).json({details :{...otherDetails}})
+                // res.status(200).json({details :{...otherDetails}});
             } else {
                 console.log('user not found');
+
             }
         });
 
